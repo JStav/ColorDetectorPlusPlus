@@ -1,5 +1,6 @@
 package phy2049.projects.colordetectorplusplus;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.hardware.Camera;
 import android.os.Bundle;
@@ -23,5 +24,12 @@ public class CameraActivity extends Activity {
             mPreview = new CameraPreview(this, mCamera);
             FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
             preview.addView(mPreview);
+
+            ActionBar actionBar = getActionBar();
+
+            if (actionBar != null){
+                actionBar.hide();
+            }
+
         }
 }
