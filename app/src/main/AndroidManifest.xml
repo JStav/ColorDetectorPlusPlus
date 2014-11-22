@@ -3,6 +3,7 @@
     package="phy2049.projects.colordetectorplusplus" >
 
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera" />
 
     <application
@@ -18,6 +19,14 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="phy2049.projects.colordetectorplusplus.CameraActivity"
+            android:label="@string/title_activity_camera"
+            android:parentActivityName="phy2049.projects.colordetectorplusplus.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="phy2049.projects.colordetectorplusplus.MainActivity" />
         </activity>
     </application>
 

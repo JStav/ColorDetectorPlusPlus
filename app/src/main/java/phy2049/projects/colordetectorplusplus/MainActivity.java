@@ -2,11 +2,13 @@ package phy2049.projects.colordetectorplusplus;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.hardware.Camera;
+import android.view.View;
 import android.widget.Toast;
 
 
@@ -64,6 +66,22 @@ public class MainActivity extends Activity {
             // no camera on this device
             return false;
         }
+    }
+
+    public static Camera getCameraInstance(){
+        Camera c = null;
+        try {
+            c = Camera.open(); // attempt to get a Camera instance
+        }
+        catch (Exception e){
+            // Camera is not available (in use or does not exist)
+        }
+        return c; // returns null if camera is unavailable
+    }
+
+    public void startCamera(View view){
+        Intent intent = new Intent(this, CameraActivity.class);
+        startActivity(intent);
     }
 
 }
