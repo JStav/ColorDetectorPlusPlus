@@ -1,18 +1,28 @@
 package phy2049.projects.colordetectorplusplus;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.hardware.Camera;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.Toast;
+
+import phy2049.ColorProcessor;
 
 
 public class MainActivity extends Activity {
+
+
+    private final int CAPTURE_IMAGE_REQUEST_CODE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +40,13 @@ public class MainActivity extends Activity {
             CharSequence cameraReadyToast = "Camera unavailable";
             Toast toast = Toast.makeText(getApplicationContext(), cameraReadyToast, Toast.LENGTH_SHORT);
             toast.show();
-
         }
 
+        ActionBar actionBar = getActionBar();
+
+        if(actionBar != null) {
+            actionBar.hide();
+        }
     }
 
 
@@ -68,20 +82,30 @@ public class MainActivity extends Activity {
         }
     }
 
-    public static Camera getCameraInstance(){
-        Camera c = null;
-        try {
-            c = Camera.open(); // attempt to get a Camera instance
-        }
-        catch (Exception e){
-            // Camera is not available (in use or does not exist)
-        }
-        return c; // returns null if camera is unavailable
+    public void startCamera(View view){
+
+//        Toast toast = new Toast(getApplicationContext());
+//        toast.setText("Place the object in the middle of the picture");
+//        toast.setDuration(Toast.LENGTH_SHORT);
+//        toast.show();
+        Uri fileUri;
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        fileUri = MediaOutputHandler.getOutputMediaFileUri();
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+        startActivityForResult(intent, CAPTURE_IMAGE_REQUEST_CODE);
     }
 
-    public void startCamera(View view){
-        Intent intent = new Intent(this, CameraActivity.class);
-        startActivity(intent);
+    public void processColor(View view){
+        Bitmap image = ColorProcessor.loadBitmap(MediaOutputHandler.getOutputMediaFileUri().getPath());
+        String hexColor = ColorProcessor.getCenterPixelArrayColor(image);
+
+        FrameLayout colorDisplay = (FrameLayout)findViewById(R.id.frameLayout);
+
+        System.out.println(hexColor);
+
+        int hexInt = Color.parseColor(hexColor);
+
+        colorDisplay.setBackgroundColor(hexInt);
     }
 
 }
